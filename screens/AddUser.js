@@ -18,8 +18,6 @@ const AddUser = () => {
     { label: 'พิพิธภัณฑ์โบราณคดี', value: 'พิพิธภัณฑ์โบราณคดี' },
     { label: 'พิพิธภัณฑ์ประวัติศาสตร์', value: 'พิพิธภัณฑ์ประวัติศาสตร์' },
   ];
-
-
     const navigation = useNavigation();
     const [Name, setName] = useState('');
     const [Address, setAddress] = useState('');

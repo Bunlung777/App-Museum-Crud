@@ -157,7 +157,17 @@ const Home = () => {
         <View style={styles.doccardLayout1}>
           <View style={[styles.doccard, styles.doccardShadowBox]}>
             <View style={[styles.doccardChild, styles.doccardLayout1]} />
-            <Pressable onPress={() =>  navigation.navigate('DetailMuseum', { id: item.id , name: item.Name, detail:item.Detail,img:item.ImageUrl,Page:Home,Lat:item.Lat,Lomg:item.Long })}>
+            <Pressable onPress={() =>  navigation.navigate('DetailMuseum', 
+            { id: item.id , 
+            name: item.Name, 
+            detail:item.Detail,
+            img:item.ImageUrl,
+            Page:Home,
+            Lat:item.Lat,
+            Long:item.Long,
+            Date:item.Date,
+            Address:item.Address
+            })}>
             <Image
               style={[styles.maskGroupIcon, styles.groupPosition]}
               contentFit="cover"

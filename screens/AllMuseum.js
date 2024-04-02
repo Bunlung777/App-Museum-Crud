@@ -156,7 +156,8 @@ useEffect(() => {
             Page:AllMuseum,
             Lat:item.Lat,
             Long:item.Long,
-            Date:item.Date
+            Date:item.Date,
+            Address:item.Address
             })}>
             <Image
                 style={[styles.maskGroupIcon, styles.groupPosition]}

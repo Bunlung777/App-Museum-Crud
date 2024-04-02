@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import { StyleSheet, View, Text, Pressable,ScrollView,Linking } from "react-native";
+import { StyleSheet, View, Text, Pressable,ScrollView,Linking,Modal } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import LocationDetailsContainer from "../components/LocationDetailsContainer";
@@ -8,13 +8,22 @@ import { db } from "../Database/firebase";
 import DetailMuseum2 from './DetailMuseum2';
 import Navbar from "./Navbar";
 import MapView,{Marker} from "react-native-maps";
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 const DetailMuseum = ({route}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalImg, setModalImg] = useState(false);
   const detailInfo = route.params.detail;
-  const openModal = () => {
+  const openModal = (Modal) => {
+    if(Modal == 'ModalDetail'){
     setModalVisible(true);
+    }
+    else if(Modal == 'ModalImg'){
+      setModalImg(true);
+    }
   };
+
 
   const closeModal = () => {
     setModalVisible(false);
@@ -23,6 +32,7 @@ const DetailMuseum = ({route}) => {
     const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
     Linking.openURL(url);
   };
+  
   return (
     <View>
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
@@ -51,11 +61,37 @@ const DetailMuseum = ({route}) => {
       <Pressable
         style={styles.bannerParent}
       >
+        <Pressable onPress={()=>{
+            openModal('ModalImg')
+          }}>
         <Image
           style={styles.bannerIcon}
           contentFit="cover"
           source={{uri:route.params.img}}
         />
+        </Pressable>
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalImg}
+        onRequestClose={() => {
+          setModalImg(!modalImg);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <Image
+            style={[styles.modalImage]}
+            contentFit="contain"
+            source={{ uri: route.params.img }}
+          />
+          <Pressable
+            style={styles.closeButton}
+            onPress={() => setModalImg(!modalImg)}
+          >
+    <FontAwesomeIcon icon={faXmark} size={30} style={[{color:"#92a3fd"},{top:15}]}/>
+          </Pressable>
+        </View>
+      </Modal>
         <View style={styles.frameParent}>
       <View style={styles.wrapper}>
         <Text style={[styles.text,{paddingTop:5},{textAlign:"left"}]}>รายละเอียดสถานที่</Text>
@@ -75,20 +111,14 @@ const DetailMuseum = ({route}) => {
 
         </View>
       </View>
-      <View style={[styles.clockParent, styles.parentFlexBox]}>
-        <Image
-          style={[styles.clockIcon, styles.iconLayout]}
-          contentFit="cover"
-          source={require("../assets/clock.png")}
-        />
-        <Text style={[styles.text1, styles.textTypo2]}>11.00น.-16.00น.</Text>
-      </View>
       <View style={styles.frameContainer}>
         <View style={styles.parent}>
           <Text style={[styles.text3, styles.textTypo2]}>รายละเอียด</Text>
           <Text style={[styles.text4, styles.textTypo1]}>:</Text>
 
-          <Pressable style={{width:250,height:200}} onPress={openModal}>
+          <Pressable style={{width:250,height:200}} onPress={()=>{
+            openModal('ModalDetail')
+          }}>
           <Text style={styles.textTypo}>
             <Text
               style={styles.text6}
@@ -103,7 +133,7 @@ const DetailMuseum = ({route}) => {
           <Text style={[styles.text7, styles.textTypo2]}>ที่อยู่และติดต่อ</Text>
           <Text style={styles.textTypo1}>:</Text>
           <Text style={[styles.text9, styles.textTypo]}>
-            วัดถ้ำผาปู่ ตำบลนาอ้อ อำเภอเมือง จังหวัดเลย 42000
+            {route.params.Address}
           </Text>
         </View>
       </View>
@@ -146,6 +176,29 @@ const DetailMuseum = ({route}) => {
 };
 
 const styles = StyleSheet.create({
+  
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',  
+  },
+  modalImage: {
+    width: '90%',
+    height: '90%',
+    resizeMode: 'contain',
+    borderRadius:15
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    padding: 10,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 18,
+  },
   scrollViewContainer: {
     flexGrow: 1,
     justifyContent: "center",
